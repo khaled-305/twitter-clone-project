@@ -1,0 +1,58 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+<h2>Welcome to tweetApp</h2>
+
+<div id="tweets">
+    Loading.....
+</div>
+
+<div class="row">
+    <div class="col-md--4 mx-auto col-10">
+        <form class="form" method="POST" action="/create-tweet/">
+            {% csrf_token %}
+            <input type="hidden" value="/" name="next" />
+            <textarea class="form-control" name="content" placeholder="Your content"></textarea>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const tweetsElement = document.getElementById("tweets");
+    // tweetsElement.innerHTML = "Loading.....";
+
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    const url = "/tweets";
+    const responseType = "json";
+
+    function LikeBtn() {
+        return "<button>Like</button>"
+    }
+
+    function formatTweetElement(tweet) {
+        var formattedTweet = "<div class='mb-4'></div><h1>" + tweet.id + "</h1>" + "<p>" + tweet.content +
+            LikeBtn() +
+            "</p></div>";
+        return formattedTweet;
+    }
+
+    xhr.responseType = responseType;
+    xhr.open(method, url);
+    xhr.onload = function () {
+        const serverResponse = xhr.response;
+        const listedItems = serverResponse.response;
+        var finalTweetStr = "";
+        var i;
+        for (i = 0; i < listedItems.length; i++) {
+            console.log(listedItems[i]);
+        }
+
+        console.log(listedItems);
+    }
+    xhr.send();
+
+</script>
+
+{% endblock content %}
